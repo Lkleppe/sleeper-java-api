@@ -35,6 +35,12 @@ public class User {
         );
     }
 
+    public String getAvatarID() { return avatarID; }
+    public String getDisplayName() { return displayName; }
+    public boolean getIsBot() { return isBot; }
+    public String getUserID() { return userID; }
+    public String getUsername() { return username; }
+
     public static void main(String[] args) {
         System.out.println(getUserFromUsername("whitekap"));
     }

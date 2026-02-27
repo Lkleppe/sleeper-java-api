@@ -7,8 +7,6 @@ import org.sleeper.HttpInteraction;
 import com.google.gson.Gson;
 import org.sleeper.avatar.Avatar;
 import org.sleeper.avatar.AvatarRESTInteraction;
-
-import java.util.HashMap;
 import java.util.Map;
 
 class UserRESTInteraction {
