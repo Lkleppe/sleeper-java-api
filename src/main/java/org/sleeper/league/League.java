@@ -7,36 +7,24 @@ import org.sleeper.Sleeper;
 import java.util.*;
 
 public class League {
-    public static final String leagueID = "1255633238693523456";
-    private static Gson gson = new Gson();
-//    private String leagueID;
-    Sleeper restInteractor;
+    public static final String myLeagueID = "1255633238693523456";
+
+    private String leagueID;
+    private String name;
+    private String status;
 
     public League(String leagueID) {
-//        this.leagueID = leagueID;
-        restInteractor = new Sleeper(leagueID);
+        this.leagueID = leagueID;
     }
 
-    private static List<String> getMembers(String leagueID) {
-        ArrayList<String> members = new ArrayList<String>();
-        Sleeper restInteractor = new Sleeper(leagueID);
-        String restResponse = "";
-        try {
-            restResponse = restInteractor.getLeagueUsers();
-//            System.out.println(restResponse);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    public static League getLeague(String leagueID) {
+        Map<String, JsonElement> fromJson = JsonParser.parseString(LeagueRESTInteraction.getLeagueJson(leagueID)).getAsJsonObject().asMap();
 
-        JsonArray responseToJson = JsonParser.parseString(restResponse).getAsJsonArray();
-//        System.out.println(responseToJson);
-        for (JsonElement element : responseToJson)
-            members.add(element.getAsJsonObject().get("display_name").getAsString());
-
-        return members;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(League.getMembers(leagueID));
+        return null;
+        return new League(
+            fromJson.get("name").getAsString(),
+            fromJson.get("status").getAsString(),
+            Metadata.getMetadata(fromJson.get("metadata"))
+        );
     }
 }
