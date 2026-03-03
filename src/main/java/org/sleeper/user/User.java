@@ -35,6 +35,19 @@ public class User {
         );
     }
 
+    public static User getUserFromUserID(String userID) {
+        String userJson = UserRESTInteraction.getUserJsonByUserID(userID);
+        Map<String, JsonElement> jsonMap = JsonParser.parseString(userJson).getAsJsonObject().asMap();
+
+        return new User(
+                jsonMap.get("avatar").getAsString(),
+                jsonMap.get("display_name").getAsString(),
+                Boolean.parseBoolean(jsonMap.get("is_bot").getAsString()),
+                jsonMap.get("user_id").getAsString(),
+                jsonMap.get("username").getAsString()
+        );
+    }
+
     public String getAvatarID() { return avatarID; }
     public String getDisplayName() { return displayName; }
     public boolean getIsBot() { return isBot; }
