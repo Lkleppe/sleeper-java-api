@@ -1,6 +1,10 @@
 package org.sleeper.user;
 
 import com.google.gson.*;
+import org.sleeper.league.League;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class User {
@@ -54,7 +58,16 @@ public class User {
     public String getUserID() { return userID; }
     public String getUsername() { return username; }
 
+    public List<League> getUserLeaguesBySeason(String season) {
+        List<League> result = new ArrayList<>();
+        JsonArray jsonLeagues = JsonParser.parseString(UserRESTInteraction.getUserLeaguesJsonByUserID(userID, season)).getAsJsonArray();
+        for (JsonElement json : jsonLeagues)
+            result.add(League.getLeague(json.getAsJsonObject().asMap().get("league_id").getAsString()));
+        return result;
+    }
+
     public static void main(String[] args) {
-        System.out.println(getUserFromUsername("whitekap"));
+//        System.out.println(getUserFromUsername("whitekap"));
+        System.out.println(User.getUserFromUsername("whitekap").getUserLeaguesBySeason("2025"));
     }
 }
