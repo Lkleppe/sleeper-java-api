@@ -3,6 +3,7 @@ package org.sleeper.league;
 
 import com.google.gson.*;
 import org.sleeper.Sleeper;
+import org.sleeper.exceptions.UnknownLeagueIDException;
 
 import java.util.*;
 
@@ -31,7 +32,7 @@ public class League {
     private String loserBracketID;
     private int totalRosters;
 
-    public League(
+    private League(
             String leagueID,
             String name,
             String status,
@@ -99,9 +100,12 @@ public class League {
     public String getLoserBracketID() { return loserBracketID; }
     public int getTotalRosters() { return totalRosters; }
 
-    public static League getLeague(String leagueID) {
-        Map<String, JsonElement> fromJson = JsonParser.parseString(LeagueRESTInteraction.getLeagueJson(leagueID)).getAsJsonObject().asMap();
+    public static League getLeague(String leagueID) throws UnknownLeagueIDException {
+        JsonObject json = JsonParser.parseString(LeagueRESTInteraction.getLeagueJson(leagueID)).getAsJsonObject();
+        if (json.isJsonNull())
+            throw new UnknownLeagueIDException(leagueID);
 
+        Map<String, JsonElement> fromJson = json.asMap();
         JsonArray rosterPositionsJson = fromJson.get("roster_positions").getAsJsonArray();
         String[] rosterPositions = new String[rosterPositionsJson.size()];
         for (int i = 0; i < rosterPositionsJson.size(); ++i)
@@ -132,8 +136,39 @@ public class League {
         );
     }
 
+//    public static League getLeagueFromJson(JsonElement json) {
+//
+//    }
+
+    public String toString() {
+        return "League{" +
+                "leagueID='" + leagueID + '\'' +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", sport='" + sport + '\'' +
+                ", season='" + season + '\'' +
+                ", seasonType='" + seasonType + '\'' +
+                ", totalRosters=" + totalRosters +
+                ", shard=" + shard +
+                ", draftID='" + draftID + '\'' +
+                ", bracketID='" + bracketID + '\'' +
+                ", loserBracketID='" + loserBracketID + '\'' +
+                ", rosterPositions=" + Arrays.toString(rosterPositions) +
+                ", lastMessageID='" + lastMessageID + '\'' +
+                ", lastAuthorDisplayName='" + lastAuthorDisplayName + '\'' +
+                ", lastAuthorID='" + lastAuthorID + '\'' +
+                ", lastAuthorIsBot=" + lastAuthorIsBot +
+                ", lastMessageTime=" + lastMessageTime +
+                ", lastPinnedMessageID='" + lastPinnedMessageID + '\'' +
+                ", metadata=" + metadata +
+                ", settings=" + settings +
+                ", scoringSettings=" + scoringSettings +
+                '}';
+    }
+
     public static void main(String[] args) {
         League league = getLeague(League.myLeagueID);
 //        System.out.println(league.getDraftID());
+        throw new UnknownLeagueIDException(League.myLeagueID);
     }
 }

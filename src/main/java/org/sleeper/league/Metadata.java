@@ -23,4 +23,12 @@ public class Metadata {
                 jsonMap.get("latest_league_winner_roster_id").getAsInt()
         );
     }
+
+    public String toString() {
+        return "Metadata{" +
+                "autoContinue=" + autoContinue +
+                ", keeperDeadline=" + keeperDeadline +
+                ", latestWinnerRosterID=" + latestWinnerRosterID +
+                '}';
+    }
 }
