@@ -1,9 +1,6 @@
 package org.sleeper.players;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,13 +123,15 @@ public class Player {
         this.injuryNotes = injuryNotes;
     }
 
+    public static Player getPlayerByID(String playerID) {
+        return players.get(playerID);
+    }
+
     private static Map<String, Player> getPlayerMap() {
         Map<String, Player> result = new HashMap<>();
         JsonObject jsonObject = JsonParser.parseString(PlayerRESTInteraction.getAllPlayersJson()).getAsJsonObject();
 
         for (String jsonKey : jsonObject.keySet()) {
-//            JsonObject asObject = json.getAsJsonObject();
-//            String playerID = asObject.get("player_id").getAsString();
             result.put(jsonKey, getPlayerFromJson(jsonObject.get(jsonKey)));
         }
         return result;
@@ -349,7 +348,8 @@ public class Player {
                 '}';
     }
     public static void main(String[] args) {
-        System.out.println(getPlayerMap().get("4034"));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(getPlayerMap().get("4034")));
     }
 
 }
