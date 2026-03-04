@@ -20,7 +20,7 @@ public class Metadata {
     public String getGeniusID() { return geniusID; }
     public String getRookieYear() { return rookieYear; }
 
-    public Metadata getMetadataFromJson(JsonElement json) {
+    public static Metadata getMetadataFromJson(JsonElement json) {
         Map<String, JsonElement> jsonMap = json.getAsJsonObject().asMap();
 
         JsonElement channelID = jsonMap.get("channel_id");
@@ -32,5 +32,9 @@ public class Metadata {
                 geniusID != null && !geniusID.isJsonNull() ? geniusID.getAsString() : null,
                 rookieYear != null && !rookieYear.isJsonNull() ? rookieYear.getAsString() : null
         );
+    }
+
+    public String toString() {
+        return String.format("Metadata(channelID=%s, geniusID=%s, rookieYear=%s)", channelID, geniusID, rookieYear);
     }
 }

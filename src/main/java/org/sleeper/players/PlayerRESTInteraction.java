@@ -1,6 +1,12 @@
 package org.sleeper.players;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.sleeper.HttpInteraction;
+
+import java.util.Map;
 
 public class PlayerRESTInteraction {
 
@@ -13,6 +19,8 @@ public class PlayerRESTInteraction {
     }
 
     public static void main(String[] args) {
-        System.out.println(getAllPlayersJson());
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, JsonElement> jsonMap = JsonParser.parseString(getAllPlayersJson()).getAsJsonObject().asMap();
+        System.out.println(jsonMap.get("5063"));
     }
 }
