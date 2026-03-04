@@ -22,10 +22,15 @@ public class Metadata {
 
     public Metadata getMetadataFromJson(JsonElement json) {
         Map<String, JsonElement> jsonMap = json.getAsJsonObject().asMap();
+
+        JsonElement channelID = jsonMap.get("channel_id");
+        JsonElement geniusID = jsonMap.get("genius_id");
+        JsonElement rookieYear = jsonMap.get("rookie_year");
+
         return new Metadata(
-                jsonMap.get("channel_id").getAsString(),
-                jsonMap.get("genius_id").getAsString(),
-                jsonMap.get("rookie_year").getAsString()
+                channelID != null && !channelID.isJsonNull() ? channelID.getAsString() : null,
+                geniusID != null && !geniusID.isJsonNull() ? geniusID.getAsString() : null,
+                rookieYear != null && !rookieYear.isJsonNull() ? rookieYear.getAsString() : null
         );
     }
 }
