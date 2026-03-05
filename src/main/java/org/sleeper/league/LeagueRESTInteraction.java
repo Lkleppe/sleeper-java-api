@@ -53,7 +53,7 @@ class LeagueRESTInteraction {
     }
 
     private static String getMatchupsByWeekURL(String leagueID, int week) {
-        return String.format("https://api.sleeper.app/v1/league/<%s/matchups/%d", leagueID, week);
+        return String.format("https://api.sleeper.app/v1/league/%s/matchups/%d", leagueID, week);
     }
 
     private static String getWinnersBracketURL(String leagueID) {
@@ -74,9 +74,10 @@ class LeagueRESTInteraction {
 
     public static void main(String[] args) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement toJson = JsonParser.parseString(getLeagueJson(League.myLeagueID));
+//        JsonElement toJson = JsonParser.parseString(getLeagueJson(League.myLeagueID));
 //        JsonElement toJson = JsonParser.parseString(getRostersJson(League.myLeagueID));
 //        JsonElement toJson = JsonParser.parseString(getWinnersBracketJson(League.myLeagueID));
+        JsonElement toJson = JsonParser.parseString(getMatchupsJsonByWeek(League.myLeagueID, 1));
         System.out.println(gson.toJson(toJson));
     }
 }
