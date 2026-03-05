@@ -4,6 +4,10 @@ package org.sleeper.league;
 import com.google.gson.*;
 import org.sleeper.Sleeper;
 import org.sleeper.exceptions.UnknownLeagueIDException;
+//import org.sleeper.roster.Roster;
+import org.sleeper.roster.Roster;
+import org.sleeper.roster.RosterRESTInteraction;
+import org.sleeper.user.User;
 
 import java.util.*;
 
@@ -166,9 +170,37 @@ public class League {
                 '}';
     }
 
+    public List<Roster> getRosters() {
+        List<Roster> result = new ArrayList<>();
+
+        String rostersJson = LeagueRESTInteraction.getRostersJson(leagueID);
+        JsonArray rostersArray = JsonParser.parseString(rostersJson).getAsJsonArray();
+
+        for (JsonElement json : rostersArray)
+            result.add(Roster.getRosterFromJson(json));
+        return result;
+    }
+
+    public List<User> getUsers() {
+        List<User> result = new ArrayList<>();
+
+        String rostersJson = LeagueRESTInteraction.getUsersJson(leagueID);
+        JsonArray rostersArray = JsonParser.parseString(rostersJson).getAsJsonArray();
+
+        for (JsonElement json : rostersArray)
+            result.add(User.getUserFromJson(json));
+        return result;
+    }
+
+    public List<Matchup> getMatchups(int week) {
+        return Matchup.getMatchupsFromJson(JsonParser.parseString(LeagueRESTInteraction.getMatchupsJsonByWeek(leagueID, week)));
+    }
+
     public static void main(String[] args) {
         League league = getLeague(League.myLeagueID);
+        System.out.println(league.getMatchups(1));
+//        System.out.println(LeagueRESTInteraction.getUsersJson(myLeagueID));
 //        System.out.println(league.getDraftID());
-        throw new UnknownLeagueIDException(League.myLeagueID);
+//        throw new UnknownLeagueIDException(League.myLeagueID);
     }
 }
