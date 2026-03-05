@@ -32,7 +32,7 @@ class UserRESTInteraction {
         return String.format("https://api.sleeper.app/v1/user/%s/leagues/nfl/%s", userID, season);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 //        Map<String, JsonElement> toJson = JsonParser.parseString(getUserJsonByUserID("1255895130209001472")).getAsJsonObject().asMap();
