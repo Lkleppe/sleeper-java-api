@@ -1,21 +1,34 @@
 package org.sleeper.user;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public class Metadata {
-    private final String teamName;
+    private final Boolean allowPushNotifcation;
+    private final Boolean mentionPushNotification;
+    private final String avatarURL;
 
-    Metadata(String teamName) {
-        this.teamName = teamName;
+    Metadata(Boolean allowPushNotifcation, Boolean mentionPushNotification, String avatarURL) {
+        this.allowPushNotifcation = allowPushNotifcation;
+        this.mentionPushNotification = mentionPushNotification;
+        this.avatarURL = avatarURL;
     }
 
-    public String getTeamName() { return teamName; }
+    public Boolean getAllowPushNotification() { return allowPushNotifcation; }
+    public Boolean getMentionPushNotification() { return mentionPushNotification; }
+    public String getAvatarURL() { return avatarURL; }
 
     static Metadata getMetadataFromJson(JsonElement json) {
-        JsonElement teamName = json.getAsJsonObject().get("team_name");
+        JsonObject asObject = json.getAsJsonObject();
 
-        return new Metadata (
-                teamName != null && !teamName.isJsonNull() ? teamName.getAsString() : null
+        JsonElement allowPushNotification = asObject.get("allow_pn");
+        JsonElement mentionPushNotification = asObject.get("mention_pn");
+        JsonElement avatarURL = asObject.get("avatar");
+
+        return new Metadata(
+                allowPushNotification != null && !allowPushNotification.isJsonNull() ? allowPushNotification.getAsString().equalsIgnoreCase("on") : null,
+                mentionPushNotification != null && !mentionPushNotification.isJsonNull() ? mentionPushNotification.getAsString().equalsIgnoreCase("on") : null,
+                avatarURL != null && !avatarURL.isJsonNull() ? avatarURL.getAsString() : null
         );
     }
 }

@@ -16,18 +16,20 @@ public class User {
     private final String userID;
     private final String username;
     private final Metadata metadata;
+    private final Boolean isOwner;
 
-    private User(String avatarID, String displayName, Boolean isBot, String userID, String username, Metadata metadata) {
+    private User(String avatarID, String displayName, Boolean isBot, String userID, String username, Metadata metadata, Boolean isOwner) {
         this.avatarID = avatarID;
         this.displayName = displayName;
         this.isBot = isBot;
         this.userID = userID;
         this.username = username;
         this.metadata = metadata;
+        this.isOwner = isOwner;
     }
 
     public String toString() {
-        return String.format("User(\"%s\", \"%s\")", avatarID, username);
+        return String.format("User(\"%s\", \"%s\")", userID, displayName);
     }
 
     public static User getUserFromUsername(String username) throws UnknownUsernameException {
@@ -43,6 +45,7 @@ public class User {
                 Boolean.parseBoolean(jsonMap.get("is_bot").getAsString()),
                 jsonMap.get("user_id").getAsString(),
                 jsonMap.get("username").getAsString(),
+                null,
                 null
         );
     }
@@ -60,6 +63,7 @@ public class User {
                 Boolean.parseBoolean(jsonMap.get("is_bot").getAsString()),
                 jsonMap.get("user_id").getAsString(),
                 jsonMap.get("username").getAsString(),
+                null,
                 null
         );
     }
@@ -73,6 +77,7 @@ public class User {
         JsonElement userID = asObject.get("user_id");
         JsonElement username = asObject.get("username");
         JsonElement metadata = asObject.get("metadata");
+        JsonElement isOwner = asObject.get("is_owner");
 
         return new User (
                 avatar != null && !avatar.isJsonNull() ? avatar.getAsString() : null,
@@ -80,7 +85,8 @@ public class User {
                 isBot != null && !isBot.isJsonNull() ? isBot.getAsBoolean() : null,
                 userID != null && !userID.isJsonNull() ? userID.getAsString() : null,
                 username != null && !username.isJsonNull() ? username.getAsString() : null,
-                Metadata.getMetadataFromJson(metadata)
+                Metadata.getMetadataFromJson(metadata),
+                isOwner != null && !isOwner.isJsonNull() ? isOwner.getAsBoolean() : null
         );
     }
 
@@ -90,6 +96,7 @@ public class User {
     public String getUserID() { return userID; }
     public String getUsername() { return username; }
     public Metadata getMetadata() { return metadata; }
+    public Boolean getIsOwner() { return isOwner; }
 
     public List<League> getUserLeaguesBySeason(String season) {
         List<League> result = new ArrayList<>();
