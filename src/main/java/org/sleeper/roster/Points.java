@@ -9,9 +9,9 @@ public class Points {
     private final double ppts;
 
     Points(int fpts, int fptsAgainst, int fptsDecimal, int fptsAgainstDecimal, int ppts, int pptsDecimal) {
-        this.fpts = (double)fpts + (double)fptsDecimal / 100.0;
-        this.fptsAgainst = (double)fptsAgainst + (double)fptsAgainstDecimal / 100.0;
-        this.ppts = (double)ppts + (double)pptsDecimal / 100.0;
+        this.fpts = Math.round(fpts * 100.0 + fptsDecimal) / 100.0;
+        this.fptsAgainst = Math.round(fptsAgainst * 100.0 + fptsAgainstDecimal) / 100.0;
+        this.ppts = Math.round(ppts * 100.0 + pptsDecimal) / 100.0;
     }
 
     public String toString() {

@@ -77,7 +77,8 @@ class LeagueRESTInteraction {
 //        JsonElement toJson = JsonParser.parseString(getLeagueJson(League.myLeagueID));
 //        JsonElement toJson = JsonParser.parseString(getRostersJson(League.myLeagueID));
 //        JsonElement toJson = JsonParser.parseString(getWinnersBracketJson(League.myLeagueID));
-        JsonElement toJson = JsonParser.parseString(getMatchupsJsonByWeek(League.myLeagueID, 1));
+//        JsonElement toJson = JsonParser.parseString(getMatchupsJsonByWeek(League.myLeagueID, 1));
+        JsonElement toJson = JsonParser.parseString(getTransactionsJson(League.myLeagueID, 5));
         System.out.println(gson.toJson(toJson));
     }
 }

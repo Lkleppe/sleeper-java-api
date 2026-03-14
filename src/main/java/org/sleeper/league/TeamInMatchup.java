@@ -4,10 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.sleeper.players.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TeamInMatchup {
     Double points;
@@ -16,10 +13,39 @@ public class TeamInMatchup {
     Double customPoints;
     List<Player> starters;
     List<Double> startersPoints;
-    Map<String, Double> playersPoints;
+    PlayerPointsMap playersPoints;
+
+    public static class PlayerPointsMap {
+        Map<Player, Double> playerPointsMap;
+
+        PlayerPointsMap(Map<String, Double> playerPoints) {
+            playerPointsMap = new HashMap<>();
+            playerPoints.keySet().forEach((String id) -> playerPointsMap.put(Player.getPlayerByID(id), playerPoints.get(id)));
+        }
+
+        public Double getPlayerPointsByID(String id) {
+            return playerPointsMap.get(Player.getPlayerByID(id));
+        }
+
+        public Double getPlayer(Player player) {
+            return playerPointsMap.get(player);
+        }
+
+        public String toString() {
+            return String.format("PlayerPointsMap%s", playerPointsMap.toString());
+        }
+
+        public Map<Player, Double> getPlayerPointsMap() {
+            return Collections.unmodifiableMap(playerPointsMap);
+        }
+
+        public static PlayerPointsMap build(Map<String, Double> playerPoints) {
+            return new PlayerPointsMap(playerPoints);
+        }
+    }
 
     public TeamInMatchup(Double points, List<Player> players, String rosterID, Double customPoints,
-                         List<Player> starters, List<Double> startersPoints, Map<String, Double> playersPoints) {
+                         List<Player> starters, List<Double> startersPoints, PlayerPointsMap playersPoints) {
         this.points = points;
         this.players = players;
         this.rosterID = rosterID;
@@ -35,7 +61,7 @@ public class TeamInMatchup {
     public Double getCustomPoints() { return customPoints; }
     public List<Player> getStarters() { return starters; }
     public List<Double> getStartersPoints() { return startersPoints; }
-    public Map<String, Double> getPlayersPoints() { return playersPoints; }
+    public PlayerPointsMap getPlayersPoints() { return playersPoints; }
 
     public static TeamInMatchup getTeamFromJson(JsonElement json) {
         JsonObject asObject = json.getAsJsonObject();
@@ -76,7 +102,7 @@ public class TeamInMatchup {
                 customPoints != null && !customPoints.isJsonNull() ? customPoints.getAsDouble() : null,
                 starterList,
                 startersPointsList,
-                playerPointsMap
+                new PlayerPointsMap(playerPointsMap)
         );
     }
 

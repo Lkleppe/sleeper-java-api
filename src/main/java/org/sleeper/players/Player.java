@@ -2,10 +2,7 @@ package org.sleeper.players;
 
 import com.google.gson.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
     private static final Map<String, Player> players = getPlayerMap();
@@ -36,7 +33,7 @@ public class Player {
     private final String weight;
     private final String team;
     private final String birthCity;
-    private final List<String> fantasyPositions;
+    private final Set<String> fantasyPositions;
     private final String teamAbbreviation;
     private final String birthDate;
     private final String oddsJamID;
@@ -66,7 +63,7 @@ public class Player {
                   String yahooID, String teamChangedAt, String searchRank, String rotoworldID, String injuryStartDate,
                   String optaID, String college, String status, String lastName, String injuryStatus, String playerShard,
                   String searchLastName, String sport, String birthState, String weight, String team, String birthCity,
-                  List<String> fantasyPositions, String teamAbbreviation, String birthDate, String oddsJamID,
+                  Set<String> fantasyPositions, String teamAbbreviation, String birthDate, String oddsJamID,
                   String yearsOfExperience, String swishID, String highSchool, Metadata metadata, String height,
                   String sportsRadarID, String fantasyDataID, String searchFullName, String jerseyNumber, String kalshiID,
                   List<String> competitions, String age, String injuryBodyPart, String statsID, String position,
@@ -163,7 +160,7 @@ public class Player {
     public String getWeight() { return weight; }
     public String getTeam() { return team; }
     public String getBirthCity() { return birthCity; }
-    public List<String> getFantasyPositions() { return fantasyPositions; }
+    public Set<String> getFantasyPositions() { return fantasyPositions; }
     public String getTeamAbbreviation() { return teamAbbreviation; }
     public String getBirthDate() { return birthDate; }
     public String getOddsJamID() { return oddsJamID; }
@@ -242,7 +239,7 @@ public class Player {
         JsonElement hashtag = jsonMap.get("hashtag");
         JsonElement injuryNotes = jsonMap.get("injury_notes");
 
-        List<String> fantasyPositions = new ArrayList<>();
+        Set<String> fantasyPositions = new HashSet<>();
         if (fantasyPositionsJson != null && !fantasyPositionsJson.isJsonNull())
             for (JsonElement e : fantasyPositionsJson.getAsJsonArray())
                 fantasyPositions.add(e.getAsString());
@@ -312,44 +309,54 @@ public class Player {
     }
 
     public String toString() {
-        return "Player{" +
-                "playerID='" + playerID + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", position='" + position + '\'' +
-                ", team='" + team + '\'' +
-                ", status='" + status + '\'' +
-                ", active=" + active +
-                ", age='" + age + '\'' +
-                ", height='" + height + '\'' +
-                ", weight='" + weight + '\'' +
-                ", jerseyNumber='" + jerseyNumber + '\'' +
-                ", sport='" + sport + '\'' +
-                ", college='" + college + '\'' +
-                ", highSchool='" + highSchool + '\'' +
-                ", birthDate='" + birthDate + '\'' +
-                ", birthCity='" + birthCity + '\'' +
-                ", birthState='" + birthState + '\'' +
-                ", birthCountry='" + birthState + '\'' +
-                ", yearsOfExperience='" + yearsOfExperience + '\'' +
-                ", fantasyPositions=" + fantasyPositions +
-                ", injuryStatus='" + injuryStatus + '\'' +
-                ", injuryBodyPart='" + injuryBodyPart + '\'' +
-                ", injuryStartDate='" + injuryStartDate + '\'' +
-                ", injuryNotes='" + injuryNotes + '\'' +
-                ", depthChartPosition='" + depthChartPosition + '\'' +
-                ", depthChartOrder='" + depthChartOrder + '\'' +
-                ", hashtag='" + hashtag + '\'' +
-                ", sportsRadarID='" + sportsRadarID + '\'' +
-                ", espnID='" + espnID + '\'' +
-                ", yahooID='" + yahooID + '\'' +
-                ", fantasyDataID='" + fantasyDataID + '\'' +
-                ", statsID='" + statsID + '\'' +
-                ", metadata=" + metadata +
-                '}';
+//        return "Player{" +
+//                "playerID='" + playerID + '\'' +
+//                ", fullName='" + fullName + '\'' +
+//                ", position='" + position + '\'' +
+//                ", team='" + team + '\'' +
+//                ", status='" + status + '\'' +
+//                ", active=" + active +
+//                ", age='" + age + '\'' +
+//                ", height='" + height + '\'' +
+//                ", weight='" + weight + '\'' +
+//                ", jerseyNumber='" + jerseyNumber + '\'' +
+//                ", sport='" + sport + '\'' +
+//                ", college='" + college + '\'' +
+//                ", highSchool='" + highSchool + '\'' +
+//                ", birthDate='" + birthDate + '\'' +
+//                ", birthCity='" + birthCity + '\'' +
+//                ", birthState='" + birthState + '\'' +
+//                ", birthCountry='" + birthState + '\'' +
+//                ", yearsOfExperience='" + yearsOfExperience + '\'' +
+//                ", fantasyPositions=" + fantasyPositions +
+//                ", injuryStatus='" + injuryStatus + '\'' +
+//                ", injuryBodyPart='" + injuryBodyPart + '\'' +
+//                ", injuryStartDate='" + injuryStartDate + '\'' +
+//                ", injuryNotes='" + injuryNotes + '\'' +
+//                ", depthChartPosition='" + depthChartPosition + '\'' +
+//                ", depthChartOrder='" + depthChartOrder + '\'' +
+//                ", hashtag='" + hashtag + '\'' +
+//                ", sportsRadarID='" + sportsRadarID + '\'' +
+//                ", espnID='" + espnID + '\'' +
+//                ", yahooID='" + yahooID + '\'' +
+//                ", fantasyDataID='" + fantasyDataID + '\'' +
+//                ", statsID='" + statsID + '\'' +
+//                ", metadata=" + metadata +
+//                '}';
+        return String.format("Player{%s : %s}", playerID, fullName);
     }
+
+    @Override
+    public int hashCode() {
+        return playerID.hashCode();
+    }
+
     public static void main(String[] args) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(getPlayerMap().get("4034")));
+//        System.out.println(gson.toJson(getPlayerMap().get("4034")));
+        Map<Player, Double> playerPoints = new HashMap<>();
+        playerPoints.put(getPlayerMap().get("4034"), 27.7);
+        System.out.println(playerPoints.get("4034"));
     }
 
 }
