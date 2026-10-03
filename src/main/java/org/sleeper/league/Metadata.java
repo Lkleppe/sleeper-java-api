@@ -24,6 +24,10 @@ public class Metadata {
         );
     }
 
+    public boolean isAutoContinue() { return autoContinue; }
+    public int getKeeperDeadline() { return keeperDeadline; }
+    public int getLatestWinnerRosterID() { return latestWinnerRosterID; }
+
     public String toString() {
         return "Metadata{" +
                 "autoContinue=" + autoContinue +

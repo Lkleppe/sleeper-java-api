@@ -13,6 +13,9 @@ public class Metadata {
         this.streak = streak;
     }
 
+    public String getRecord() { return record; }
+    public String getStreak() { return streak; }
+
     public static Metadata getMetadataFromJson(JsonElement json) {
         Map<String, JsonElement> jsonMap = json.getAsJsonObject().asMap();
         return new Metadata(

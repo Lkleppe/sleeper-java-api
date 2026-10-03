@@ -12,8 +12,9 @@ import org.sleeper.user.User;
 import java.util.*;
 
 public class League {
-    public static final String myLeagueID = "1255633238693523456";
-
+    private static final String myLeagueID = "1255633238693523456";
+    private List<Roster> rosters;
+    private List<User> users;
     private String leagueID;
     private String name;
     private String status;
@@ -105,11 +106,12 @@ public class League {
     public int getTotalRosters() { return totalRosters; }
 
     public static League getLeague(String leagueID) throws UnknownLeagueIDException {
-        JsonObject json = JsonParser.parseString(LeagueRESTInteraction.getLeagueJson(leagueID)).getAsJsonObject();
+        JsonElement json = JsonParser.parseString(LeagueRESTInteraction.getLeagueJson(leagueID));
         if (json.isJsonNull())
             throw new UnknownLeagueIDException(leagueID);
+        JsonObject asObject = json.getAsJsonObject();
 
-        Map<String, JsonElement> fromJson = json.asMap();
+        Map<String, JsonElement> fromJson = asObject.asMap();
         JsonArray rosterPositionsJson = fromJson.get("roster_positions").getAsJsonArray();
         String[] rosterPositions = new String[rosterPositionsJson.size()];
         for (int i = 0; i < rosterPositionsJson.size(); ++i)
@@ -171,6 +173,8 @@ public class League {
     }
 
     public List<Roster> getRosters() {
+        if (rosters != null)
+            return rosters;
         List<Roster> result = new ArrayList<>();
 
         String rostersJson = LeagueRESTInteraction.getRostersJson(leagueID);
@@ -178,10 +182,13 @@ public class League {
 
         for (JsonElement json : rostersArray)
             result.add(Roster.getRosterFromJson(json));
+        rosters = result;
         return result;
     }
 
     public List<User> getUsers() {
+        if (users != null)
+            return users;
         List<User> result = new ArrayList<>();
 
         String rostersJson = LeagueRESTInteraction.getUsersJson(leagueID);
@@ -189,6 +196,7 @@ public class League {
 
         for (JsonElement json : rostersArray)
             result.add(User.getUserFromJson(json));
+        users = result;
         return result;
     }
 
@@ -197,8 +205,9 @@ public class League {
     }
 
     public static void main(String[] args) {
-        League league = getLeague(League.myLeagueID);
-        System.out.println(league.getMatchups(1));
+//        League league = getLeague(League.myLeagueID);
+        System.out.println(League.getLeague("1255633238693523456"));
+//        System.out.println(league.getMatchups(1));
 //        System.out.println(LeagueRESTInteraction.getUsersJson(myLeagueID));
 //        System.out.println(league.getDraftID());
 //        throw new UnknownLeagueIDException(League.myLeagueID);

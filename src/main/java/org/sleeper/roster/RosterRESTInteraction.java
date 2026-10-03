@@ -17,9 +17,9 @@ public class RosterRESTInteraction {
     }
 
     public static void main(String[] args) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonArray jsonRosters = JsonParser.parseString(getLeagueRostersFromREST(League.myLeagueID)).getAsJsonArray();
-        System.out.println(gson.toJson(jsonRosters));
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        JsonArray jsonRosters = JsonParser.parseString(getLeagueRostersFromREST(League.myLeagueID)).getAsJsonArray();
+//        System.out.println(gson.toJson(jsonRosters));
 //        System.out.println(jsonRosters);
 //        for (JsonElement json : jsonRosters) {
 //            JsonObject asObject = json.getAsJsonObject();
